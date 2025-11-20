@@ -2,30 +2,22 @@ import { useState } from 'react';
 
 function Square({ value, onSquareClick }) {
   return (
-    <button 
-      className="square"
-      onClick={onSquareClick}
-    >
+    <button className="square" onClick={onSquareClick}>
       {value}
     </button>
     );
 }
 
-export default function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [squares, setSquares] = useState(Array(9).fill(null));
+function Board({ squares, xIsNext, onPlay }) {
+  function handleClick(i) {
+    if(squares[i] || calculateWinner(squares)) return;
+    const nextSquares = squares.slice();
+    nextSquares[i] = xIsNext ? "X" : "O";
+    onPlay(nextSquares);
+  }
 
   const winner = calculateWinner(squares);
   let status = winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O");
-
-  function handleClick(i) {
-    if(squares[i] || calculateWinner(squares)) return;
-
-    const nextSquares = squares.slice();
-    nextSquares[i] = xIsNext ? "X" : "O";
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
-  }
 
   return (
     <>
@@ -46,6 +38,42 @@ export default function Board() {
         <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
       </div>
     </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+    
+  }
+
+  const moves = history.map((squares, move) => {
+    let description = move > 0 ? 'Go to move #' + move : 'Go to game start';
+    return (
+      <li>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+  
+
+  return (
+    <div className='game'>
+      <div className='game-board'>
+        <Board squares={currentSquares} xIsNext={xIsNext} onPlay={handlePlay}/>
+      </div>
+      <div className='game-info'>
+        <ol>{moves}</ol>
+      </div>
+    </div>
   );
 }
 
