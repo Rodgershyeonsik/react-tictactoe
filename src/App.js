@@ -8,11 +8,11 @@ function Square({ value, onSquareClick }) {
     );
 }
 
-function Board({ squares, xIsNext, onPlay }) {
-  function handleClick(i) {
+function Board({ squares, xIsNext, onPlay }) { // squares는 currentSquares
+  function handleClick(i) { // i: 사용자가 누른 게임판 좌표
     if(squares[i] || calculateWinner(squares)) return;
-    const nextSquares = squares.slice();
-    nextSquares[i] = xIsNext ? "X" : "O";
+    const nextSquares = squares.slice(); // squares 복제
+    nextSquares[i] = xIsNext ? "X" : "O"; // 게임판에 ox 표기
     onPlay(nextSquares);
   }
 
@@ -43,6 +43,7 @@ export default function Game() {
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  const [isDes, setIsDes] = useState(false);
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -54,7 +55,11 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
+  function handleToggle() {
+    setIsDes(!isDes);
+  }
+
+  let moves = history.map((squares, move) => {
     let description = move > 0 ? 'Go to move #' + move : 'Go to game start';
     return (
       <li key={move}>
@@ -64,7 +69,8 @@ export default function Game() {
       </li>
     );
   });
-  
+
+  if(isDes) moves = moves.slice().reverse();
 
   return (
     <div className='game'>
@@ -72,6 +78,15 @@ export default function Game() {
         <Board squares={currentSquares} xIsNext={xIsNext} onPlay={handlePlay}/>
       </div>
       <div className='game-info'>
+        <div className='toggle-wrapper'>
+          <input type='checkbox' id='sort-toggle' className='toggle-input' checked={isDes} onChange={handleToggle} />
+          <label htmlFor='sort-toggle' className='toggle-label'>
+            <span className='toggle-text left'>DES</span>
+            <span clssName='toggle-text right'>ASC</span>
+            <span className='toggle-slider'></span>{/* 손잡이 */}
+          </label>
+          
+        </div>
         <ol>{moves}</ol>
       </div>
     </div>

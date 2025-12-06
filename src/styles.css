@@ -88,3 +88,80 @@ body {
 .game-info {
   margin-left: 20px;
 }
+
+.toggle-wrapper {
+  display: flex; /* 내부 요소 정렬 */
+  align-items: center;
+  margin: 5px 0;
+}
+
+.toggle-input {
+  display: none; /* 실제 체크박스 숨기기 */
+}
+
+.toggle-label {
+  width: 80px;
+  height: 35px;
+
+  border-radius: 20px;
+
+  cursor: pointer;
+
+  position: relative;
+
+  background-color: #555;
+  transition: background-color 0.3s ease
+}
+
+.toggle-slider {
+  position: absolute; /* label 안에서 자유롭게 움직이도록 설정 */
+  top: 5px; /* label 위아래 중앙에 위치 */
+  left: 5px; /* 초기 위치는 왼쪽에서 5px 떨어진 곳 */
+
+  width: 25px;
+  height: 25px;
+
+  border-radius: 50%; /* 원형 */
+  background-color: white;
+
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-input:checked ~ .toggle-label .toggle-slider {
+  transform: translateX(45px);
+}
+
+.toggle-text {
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  line-height: 40px; /* label 높이와 같게 해서 수직 중앙 정렬 */
+  padding: 0 10px;
+  font-weight: bold;
+  user-select: none; /* 드래그 방지 */
+}
+
+.toggle-text.left {
+  left: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-text.right {
+  right: 10px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-input:checked ~ .toggle-label {
+  background-color: #ff4347 
+}
+
+.toggle-input:checked ~ .toggle.label .toggle-text.left {
+  opacity: 1;
+}
+
+.toggle-input:checked ~ .toggle-label .toggle-text.right {
+  opacity: 0;
+}
