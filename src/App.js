@@ -82,10 +82,9 @@ export default function Game() {
           <input type='checkbox' id='sort-toggle' className='toggle-input' checked={isDes} onChange={handleToggle} />
           <label htmlFor='sort-toggle' className='toggle-label'>
             <span className='toggle-text left'>DES</span>
-            <span clssName='toggle-text right'>ASC</span>
+            <span className='toggle-text right'>ASC</span>
             <span className='toggle-slider'></span>{/* 손잡이 */}
           </label>
-          
         </div>
         <ol>{moves}</ol>
       </div>
